@@ -1,5 +1,7 @@
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_example/db/db_query.dart';
+import 'package:sqflite_example/models/user_model.dart';
 
 class SqfLiteHelper {
   static const String dbName = "example.db";
@@ -18,7 +20,23 @@ class SqfLiteHelper {
     return _db;
   }
 
-  Future<void> insertUser(Map<String, dynamic> userMap) async {
-    await _db.insert(Query.user, userMap);
+  static Future<bool> insertUser(UserModel userMap) async {
+    try {
+      await _db.insert(Query.user, userMap.toMap());
+      return true;
+    } catch (e) {
+      e.printError();
+      return false;
+    }
+  }
+
+  static Future<List<UserModel>> readUsers({String? username, String? password}) async {
+    try {
+      var data = await _db.query(Query.user, where: "username='$username' AND password='$password'");
+      if (data.isEmpty) return [];
+      return data.map((e) => UserModel.fromMap(e)).toList();
+    } catch (e) {
+      return [];
+    }
   }
 }

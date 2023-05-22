@@ -6,7 +6,7 @@ class Query {
     `username` VARCHAR(100) NOT NULL,
     `password` VARCHAR(200) NOT NULL,
     `name` VARCHAR(100) NOT NULL,
-    `mobile` VARCHAR(15),
+    `image` TEXT,
     `email` VARCHAR(50)
   )''';
 }
